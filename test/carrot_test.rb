@@ -30,4 +30,4 @@ private
     @queue ||= carrot.queue(name)
   end
 
-end # context 'test queue'
+end # class CarrotTest
