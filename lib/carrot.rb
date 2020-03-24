@@ -6,7 +6,7 @@ class Carrot
     PORT          = 5672
   end
 end
-  
+
 $:.unshift File.expand_path(File.dirname(File.expand_path(__FILE__)))
 require 'carrot/amqp/spec'
 require 'carrot/amqp/buffer'
@@ -18,19 +18,16 @@ require 'carrot/amqp/server'
 require 'carrot/amqp/protocol'
 
 class Carrot
-  @logging = false
-  class << self
-    attr_accessor :logging
-  end
-  def self.logging?
-    @logging
-  end
   class Error < StandardError; end
+
+  def self.logging=(value)
+    @logging = value
+  end
 
   def initialize(opts = {})
     @opts = opts
   end
-  
+
   def queue(name, opts = {})
     queues[name] ||= AMQP::Queue.new(self, name, opts)
   end
@@ -70,6 +67,12 @@ class Carrot
   end
 
 private
+
+  @logging = false
+
+  def self.logging?
+    @logging
+  end
 
   def log(*args)
     return unless Carrot.logging?
