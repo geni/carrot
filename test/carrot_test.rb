@@ -2,6 +2,10 @@ require 'test_helper'
 
 class CarrotTest < TestHelper
 
+  def teardown
+    queue.purge
+  end
+
   test "large message" do
     msg = 'a' * 131_000
     queue.publish(msg)
