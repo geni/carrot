@@ -1,8 +1,10 @@
 require 'test_helper'
 
-context 'test queue' do
+class CarrotTest < TestHelper
+
   TEST_QUEUE = '_carrot_test'
-  setup do
+
+  def setup
     @carrot = Carrot.new
     @q      = @carrot.queue(TEST_QUEUE)
     @q.purge
@@ -20,4 +22,5 @@ context 'test queue' do
     @carrot.reset
     assert_equal count + 1, @q.message_count
   end
-end
+
+end # context 'test queue'

@@ -60,4 +60,4 @@ There is currently no way to prevent buffering using eventmachine. Support for p
 
 # LICENSE
 
-Copyright (c) 2009 Amos Elliston, Geni.com; Published under The MIT License, see License
+Copyright (c) 2009-2020 Geni.com; Published under The MIT License, see License
