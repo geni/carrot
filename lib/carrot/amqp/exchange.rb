@@ -15,7 +15,6 @@ module Carrot::AMQP
         )
       end
     end
-    attr_reader :name, :type, :key
 
     def publish(data, opts = {})
       out = []

@@ -90,7 +90,7 @@ module Carrot::AMQP
         end
 
         def == b
-          self.class.arguments.inject(true) do |eql, (type, name)|
+          self.class.arguments.inject(true) do |eql, (_, name)|
             eql and __send__("#{name}") == b.__send__("#{name}")
           end
         end

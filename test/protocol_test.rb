@@ -41,8 +41,8 @@ class ProtocolTest < TestHelper
   test 'convert binary to header' do
     orig = Protocol::Header.new(
       Protocol::Basic,
-      size = 5,
-      weight = 0,
+      5,
+      0,
       :content_type  => 'text/json',
       :delivery_mode => 1,
       :priority      => 1

@@ -29,6 +29,7 @@ module Carrot::AMQP
       @frame_max = opts[:frame_max] || 131072
       @insist = opts[:insist]
       @status = 'NOT CONNECTED'
+      @socket = nil
 
       @use_ssl    = !!opts[:ssl]
       @ssl_verify = opts[:ssl_verify] || OpenSSL::SSL::VERIFY_PEER
@@ -76,7 +77,8 @@ module Carrot::AMQP
       )
       puts "Error closing connection" unless next_method.is_a?(Protocol::Connection::CloseOk)
 
-    rescue ServerDown => e
+    rescue ServerDown
+      # don't care if server is down while closing connection
     ensure
       close_socket
     end
@@ -139,7 +141,7 @@ module Carrot::AMQP
         @status   = 'CONNECTED'
       rescue SocketError, SystemCallError, IOError, Timeout::Error => e
         msg = e.message << " - #{@host}:#{@port}"
-        raise ServerDown, e.message
+        raise ServerDown, msg
       ensure
         mutex.unlock if multithread?
       end

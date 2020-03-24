@@ -22,7 +22,7 @@ module Carrot::AMQP
       end
 
       def arguments
-        self.class.arguments.inject({}) do |hash, (type, name)|
+        self.class.arguments.inject({}) do |hash, (_, name)|
           hash.update name => instance_variable_get("@#{name}")
         end
       end
