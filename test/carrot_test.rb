@@ -2,9 +2,10 @@ require 'test_helper'
 
 class CarrotTest < TestHelper
 
-  test "large messages" do
-    msg = 'a' * 1024 * 1024
+  test "large message" do
+    msg = 'a' * 131_000
     queue.publish(msg)
+
     assert_equal msg, queue.pop
   end
 
