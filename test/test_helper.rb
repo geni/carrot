@@ -20,3 +20,12 @@ class TestHelper < MiniTest::Test
   end
 
 end # class TestHelper
+
+class Object
+
+  def tap_pp(*args)
+    pp [*args, self]
+    self
+  end
+
+end # class Object
