@@ -39,7 +39,7 @@ class CarrotTest < TestHelper
     assert_equal 'one', queue.pop
     queue.ack
     carrot.reset
-    assert_equal nil, queue.pop(:ack => true)
+    assert_nil queue.pop(:ack => true)
   end
 
   test "reset" do
