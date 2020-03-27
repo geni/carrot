@@ -21,15 +21,16 @@ module Carrot::AMQP
     class ProtocolError   < StandardError; end
 
     def initialize(opts = {})
-      @host   = opts[:host]  || 'localhost'
-      @port   = opts[:port]  || DEFAULT_PORT
-      @user   = opts[:user]  || 'guest'
-      @pass   = opts[:pass]  || 'guest'
-      @vhost  = opts[:vhost] || '/'
-      @frame_max = opts[:frame_max] || 131072
-      @insist = opts[:insist]
-      @status = 'NOT CONNECTED'
-      @socket = nil
+      @host         = opts[:host]         || 'localhost'
+      @port         = opts[:port]         || DEFAULT_PORT
+      @user         = opts[:user]         || 'guest'
+      @pass         = opts[:pass]         || 'guest'
+      @vhost        = opts[:vhost]        || '/'
+      @frame_max    = opts[:frame_max]    || 131072
+      @channel_max  = opts[:channel_max]  || 100
+      @insist       = opts[:insist]
+      @status       = 'NOT CONNECTED'
+      @socket       = nil
 
       @use_ssl    = !!opts[:ssl]
       @ssl_verify = opts[:ssl_verify] || OpenSSL::SSL::VERIFY_PEER
@@ -157,7 +158,7 @@ module Carrot::AMQP
 
       send_frame(
         Protocol::Connection::StartOk.new(
-          {:platform => 'Ruby', :product => 'Carrot', :information => 'http://github.com/famosagle/carrot', :version => RUBY_VERSION},
+          {:platform => 'Ruby', :product => 'Carrot', :information => 'http://github.com/geni/carrot', :version => '1.3.0'},
           'AMQPLAIN',
           {:LOGIN => @user, :PASSWORD => @pass},
           'en_US'
@@ -169,7 +170,7 @@ module Carrot::AMQP
 
       if method.is_a?(Protocol::Connection::Tune)
         send_frame(
-          Protocol::Connection::TuneOk.new( :channel_max => 0, :frame_max => @frame_max, :heartbeat => 0)
+          Protocol::Connection::TuneOk.new( :channel_max => @channel_max, :frame_max => @frame_max, :heartbeat => 0)
         )
       end
 
