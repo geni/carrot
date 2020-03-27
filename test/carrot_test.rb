@@ -42,6 +42,10 @@ class CarrotTest < TestHelper
     assert_nil queue.pop(:ack => true)
   end
 
+  test 'naked ack does not raise error' do
+    queue.ack
+  end
+
   test "reset" do
     queue.purge
     queue.publish('test')

@@ -35,6 +35,8 @@ module Carrot::AMQP
     end
 
     def ack
+      return unless delivery_tag
+
       server.send_frame(
         Protocol::Basic::Ack.new(:delivery_tag => delivery_tag)
       )
