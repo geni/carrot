@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'bundler'
+Bundler.setup(:default, :test)
 
 # This has to happen before other files are loaded
 require 'simplecov'
