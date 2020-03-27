@@ -10,14 +10,44 @@ class CarrotTest < TestHelper
     msg = 'a' * 131_000
     queue.publish(msg)
 
-    assert_equal msg, queue.pop
+    assert_equal msg, queue.pop(:ack => true)
+  end
+
+  test 'pop without ack redelivers after reset' do
+    queue.publish('one')
+
+    assert_equal 'one', queue.pop
+    assert_equal 0, queue.message_count, 'queue should be considered empty'
+    carrot.reset
+    assert_equal 1, queue.message_count, 'old message should be retried'
+
+    assert_equal 'one', queue.pop(:ack => false)
+    assert_equal 0, queue.message_count, 'queue should be considered empty'
+    carrot.reset
+    assert_equal 1, queue.message_count, 'old message should be retried'
+
+    assert_equal 'one', queue.pop(:ack => true)
+    assert_equal 0, queue.message_count, 'queue should be considered empty'
+    carrot.reset
+
+    assert_nil   queue.pop(:ack => true)
+  end
+
+  test 'pop then ack empties queue' do
+    queue.publish('one')
+
+    assert_equal 'one', queue.pop
+    queue.ack
+    carrot.reset
+    assert_equal nil, queue.pop(:ack => true)
   end
 
   test "reset" do
-    count = queue.message_count
+    queue.purge
     queue.publish('test')
     carrot.reset
-    assert_equal count + 1, queue.message_count
+    assert_equal 1, queue.message_count
+    queue.pop(:ack => true)
   end
 
 private

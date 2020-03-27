@@ -17,7 +17,7 @@ module Carrot::AMQP
     def pop(opts = {})
       self.delivery_tag = nil
       server.send_frame(
-        Protocol::Basic::Get.new({ :queue => name, :consumer_tag => name, :no_ack => !opts.delete(:ack), :nowait => true }.merge(opts))
+        Protocol::Basic::Get.new({ :queue => name, :consumer_tag => name, :no_ack => opts.delete(:ack), :nowait => true }.merge(opts))
       )
       method = server.next_method
       return unless method.kind_of?(Protocol::Basic::GetOk)
@@ -51,7 +51,7 @@ module Carrot::AMQP
     def consumer_count
       status.last
     end
-    
+
     def status
       server.send_frame(
         Protocol::Queue::Declare.new(opts)
