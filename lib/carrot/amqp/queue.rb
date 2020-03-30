@@ -21,7 +21,7 @@ module Carrot::AMQP
           {
             :queue        => name,
             :consumer_tag => name,
-            :no_ack       => opts.delete(:ack),
+            :no_ack       => opts[:ack],
             :nowait       => true
           }.merge(opts)
         )
@@ -79,7 +79,7 @@ module Carrot::AMQP
           {
             :queue        => name,
             :exchange     => exchange,
-            :routing_key  => opts.delete(:key),
+            :routing_key  => opts[:key],
             :nowait       => true,
           }.merge(opts)
         )
@@ -95,7 +95,7 @@ module Carrot::AMQP
           {
             :queue        => name,
             :exchange     => exchange,
-            :routing_key  => opts.delete(:key),
+            :routing_key  => opts[:key],
             :nowait       => true,
           }.merge(opts)
         )

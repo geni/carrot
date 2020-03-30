@@ -20,15 +20,15 @@ module Carrot::AMQP
       out = []
 
       out << Protocol::Basic::Publish.new(
-        { :exchange => name, :routing_key => opts.delete(:key) || key }.merge(opts)
+        { :exchange => name, :routing_key => opts[:key] || key }.merge(opts)
       )
       data = data.to_s
       out << Protocol::Header.new(
         Protocol::Basic,
         data.length, {
           :content_type  => 'application/octet-stream',
-          :delivery_mode => (opts.delete(:persistent) ? 2 : 1),
-          :priority      => 0 
+          :delivery_mode => (opts[:persistent] ? 2 : 1),
+          :priority      => 0
         }.merge(opts)
       )
       out << Frame::Body.new(data)
