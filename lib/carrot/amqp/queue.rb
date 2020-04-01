@@ -29,7 +29,7 @@ module Carrot::AMQP
       method = server.next_method
       return unless method.kind_of?(Protocol::Basic::GetOk)
 
-      self.delivery_tag = method.delivery_tag
+      self.delivery_tag = opts[:ack] ? nil : method.delivery_tag
 
       header = server.next_payload
 
