@@ -129,8 +129,15 @@ module Carrot::AMQP
       begin
         # Attempt to connect.
         mutex.lock if multithread?
-        @socket = timeout(CONNECT_TIMEOUT) do
-          TCPSocket.new(host, port)
+
+        if defined?(RUBY_VERSION) && RUBY_VERSION >= '2.3'
+          @socket = Timeout.timeout(CONNECT_TIMEOUT) do
+            TCPSocket.new(host, port)
+          end
+        else
+          @socket = timeout(CONNECT_TIMEOUT) do
+            TCPSocket.new(host, port)
+          end
         end
 
         if Socket.constants.include? 'TCP_NODELAY'
